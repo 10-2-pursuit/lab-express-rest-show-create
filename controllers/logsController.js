@@ -2,7 +2,7 @@ const express = require("express");
 const logs = express.Router();
 const logsArray = require('../models/log.js');
 const validateURL = require("../models/validateURL.js");
-let bodyParser = require('body-parser');
+const bodyParser = require('body-parser');
 let jsonParser = bodyParser.json();
 
 logs.get("/", (req, res) => {
@@ -58,7 +58,7 @@ logs.post("/", jsonParser, (req, res) => {
 logs.delete("/:arrayIndex", (req, res) => {
     const { arrayIndex } = req.params;
     if(Number(arrayIndex) >= 0 && Number(arrayIndex) < logsArray.length && Number(arrayIndex) != NaN){
-        logsArray.splice(Number(arrayIndex), 1);
+        let deletedLog = logsArray.splice(Number(arrayIndex), 1);
         res.status().send(`deletes at the index in the logs array`);
     }
     res.status(202).redirect("/9001");
