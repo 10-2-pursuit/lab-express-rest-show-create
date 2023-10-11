@@ -4,11 +4,6 @@ const app = express()
 
 app.use(express.json())
 
-// app.use((req,res, next) => {
-//     //res.status(404).send("invalid index")
-//     next()
-// })
-
 app.get("/", (req, res) => {
   res.send("welcome to the captain's log")
 })
