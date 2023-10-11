@@ -6,12 +6,35 @@ var bodyParser = require('body-parser');
 var jsonParser = bodyParser.json();
 
 logs.get("/", (req, res) => {
+    if(req.query.length > 0){
+        let queryResult = logsArray;
+        if(req.query){
+            switch(req.query.order){
+                case "asc": 
+                    queryResult = queryResult.sort((prev, next) => {return (prev.captainName.toLowerCase() > next.captainName.toLowerCase()) ? 1 : (prev.captainName.toLowerCase() < next.captainName.toLowerCase()) ? -1 : 0});
+                    break;
+                case "desc": 
+                    queryResult = queryResult.sort((prev, next) => {return (prev.captainName.toLowerCase() > next.captainName.toLowerCase()) ? -1 : (prev.captainName.toLowerCase() < next.captainName.toLowerCase()) ? 1 : 0});
+                    break;
+                default:
+            };
+            /*
+                - `/logs?lastCrisis=gt10` it will return all the logs where the `daysSinceLastCrisis`is **g**reater **t**than 10
+                - `/logs?lastCrisis=gte20`it will return all the logs where the `daysSinceLastCrisis`is **g**reater **t**than or **e**qual to 20
+                - `/logs?lastCrisis=lte5`it will return all the logs where the `daysSinceLastCrisis`is **l**ess **t**than or **e**qual to 5
+            */
+            switch(req.query.mistakes){
+                case "true":    
+                    queryResult = queryResult.filter(singleLog => singleLog.mistakesWereMadeToday == "true");
+                    break;
+                case "false": 
+                    queryResult = queryResult.filter(singleLog => singleLog.mistakesWereMadeToday == "false");
+                    break;
+                default:
+            }
+        }
+    }
     res.json(logsArray);
-});
-
-logs.post("/", jsonParser, (req, res) => {
-    logsArray.push(req.body);
-    res.json(logsArray[logsArray.length - 1]);
 });
 
 logs.get("/:arrayIndex", (req, res) => {
@@ -25,6 +48,11 @@ logs.get("/:arrayIndex", (req, res) => {
 // 404 Page not found
 logs.get("*", (req, res) => {
     res.status(404).json({ error: "Page not found" });
+});
+
+logs.post("/", jsonParser, (req, res) => {
+    logsArray.push(req.body);
+    res.json(logsArray[logsArray.length - 1]);
 });
 
 logs.delete("/:arrayIndex", (req, res) => {
