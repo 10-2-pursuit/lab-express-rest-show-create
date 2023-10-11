@@ -18,4 +18,14 @@ logs.post("/", (req,res) => {
     res.status(200).json({status: "OK", payload: logsArray[logsArray.length-1]})
 })
 
+logs.delete("/:arrayIndex", (req,res) => {
+    if(logsArray[req.params.arrayIndex]){
+        const deletedLog = logsArray.splice(req.params.arrayIndex, 1)
+        //res.status(200).json(deletedLog[0])
+        res.redirect("/logs")
+    }
+    else
+        res.status(404).json({error: "Not Found"})
+})
+
 module.exports = logs
