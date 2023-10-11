@@ -21,7 +21,7 @@ logs.get("/:arrayIndex", validateURL, (req, res) => {
     if(Number(arrayIndex) != NaN && (Number(arrayIndex) >= 0 && Number(arrayIndex) < logsArray.length)){
         res.json(logsArray[Number(arrayIndex)]);
     }
-    logs.redirect("/9001");
+    res.redirect("/9001");
 });
 
 logs.get("/9001", (req, res) => {
