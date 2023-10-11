@@ -3,8 +3,29 @@ const logs = express.Router()
 const logsArray = require("../models/log.js")
 
 logs.get("/", (req,res) => {
-    res.json(logsArray)
+    if(req.query.order){
+        logsArray.sort((a,b) => {
+            if(a.captainName.toLowerCase() < b.captainName.toLowerCase())
+                return -1
+            else if (a.captainName.toLowerCase() > b.captainName.toLowerCase())
+                return 1
+            else
+                return 0
+            
+        })
+        if(req.query.order==="asc")
+            res.json(logsArray)
+        else if(req.query.order==="desc")
+            res.json(logsArray.reverse())    
+        else
+            res.redirect('/9001')
+    }
+    else{
+        res.json(logsArray)
+    }
 })
+
+logs.get("/:order", )
 
 logs.get("/:arrayIndex", (req,res) => {
    if(logsArray[req.params.arrayIndex])
