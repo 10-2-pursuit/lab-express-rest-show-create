@@ -33,4 +33,12 @@ logs.get("*", (req, res) => {
     res.status(404).json({ error: "Page not found" });
 });
 
+logs.delete("/:arrayIndex", (req, res) => {
+    const { arrayIndex } = req.params;
+    if(Number(arrayIndex) >= 0 && Number(arrayIndex) < logsArray.length && Number(arrayIndex) != NaN){
+        logsArray.splice(Number(arrayIndex), 1);
+        res.send(`deletes at the index in the logs array`);
+    }
+});
+
 module.exports = logs;
