@@ -47,9 +47,8 @@ logs.get("/", (req,res) => {
         else
             res.redirect('/9001')
     }
-    else{
+    else
         res.json(logsArray)
-    }
 })
 
 logs.get("/:order", )
@@ -64,6 +63,11 @@ logs.get("/:arrayIndex", (req,res) => {
 logs.post("/", (req,res) => {
     logsArray.push(req.body)
     res.status(200).json({status: "OK", payload: logsArray[logsArray.length-1]})
+})
+
+logs.put("/:arrayIndex", (req,res) => {
+    logsArray[req.params.arrayIndex] = req.body
+    res.status(200).json(logsArray[req.params.arrayIndex])
 })
 
 logs.delete("/:arrayIndex", (req,res) => {
