@@ -1,13 +1,18 @@
-// DEPENDENCIES
-const express = require("express");
+const express = require("express")
 
-// CONFIGURATION
-const app = express();
+const app = express()
 
-// ROUTES
+app.use(express.json())
+
 app.get("/", (req, res) => {
-  res.send("Welcome to my Express app");
-});
+  res.send("welcome to the captain's log")
+})
 
-// EXPORT
-module.exports = app;
+const logsController = require("./controllers/logs.controller.js")
+app.use("/logs", logsController)
+
+app.get("*", (req,res) => {
+    res.status(404).json({error: "Sorry, no page found!"})
+})
+
+module.exports = app
