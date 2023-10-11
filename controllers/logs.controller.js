@@ -27,7 +27,23 @@ logs.get("/", (req,res) => {
         else if(req.query.mistakes==="false")
             res.json(logsArray.filter(current => { 
                 return current.mistakesWereMadeToday === false
-        }))
+            }))
+        else
+            res.redirect('/9001')
+    }
+    else if(req.query.lastCrisis){
+        if(req.query.lastCrisis==="gt10")
+            res.json(logsArray.filter(current => { 
+                return current.daysSinceLastCrisis > 10 
+            }))
+        else if(req.query.lastCrisis==="gte20")
+            res.json(logsArray.filter(current => { 
+                return current.daysSinceLastCrisis >= 20 
+            }))
+        else if(req.query.lastCrisis==="lte5")
+            res.json(logsArray.filter(current => { 
+                return current.daysSinceLastCrisis <= 5 
+            }))
         else
             res.redirect('/9001')
     }
