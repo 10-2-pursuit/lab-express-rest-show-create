@@ -22,9 +22,9 @@ logs.post("/", (req, res) => {
     res.status(200).send(logsArray[logsArray.length - 1])
 })
 
-logs.delete("/:index", (req, res) => {
-    const {index} = req.params;
-    const deletedLog = logsArray.splice(index, 1);
+logs.delete("/:arrayIndex", (req, res) => {
+    const {arrayIndex} = req.params;
+    const deletedLog = logsArray.splice(arrayIndex, 1);
     res.status(200).send(deletedLog[0])
 })
 
