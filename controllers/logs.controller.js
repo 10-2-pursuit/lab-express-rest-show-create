@@ -11,12 +11,23 @@ logs.get("/", (req,res) => {
                 return 1
             else
                 return 0
-            
         })
         if(req.query.order==="asc")
             res.json(logsArray)
         else if(req.query.order==="desc")
             res.json(logsArray.reverse())    
+        else
+            res.redirect('/9001')
+    }
+    else if(req.query.mistakes){
+        if(req.query.mistakes==="true")
+            res.json(logsArray.filter(current => { 
+                return current.mistakesWereMadeToday === true
+            }))
+        else if(req.query.mistakes==="false")
+            res.json(logsArray.filter(current => { 
+                return current.mistakesWereMadeToday === false
+        }))
         else
             res.redirect('/9001')
     }
