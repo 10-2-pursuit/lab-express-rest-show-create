@@ -2,8 +2,8 @@ const express = require("express");
 const logs = express.Router();
 const logsArray = require('../models/log.js');
 const validateURL = require("../models/validateURL.js");
-var bodyParser = require('body-parser');
-var jsonParser = bodyParser.json();
+let bodyParser = require('body-parser');
+let jsonParser = bodyParser.json();
 
 logs.get("/", (req, res) => {
     if(req.query.length > 0){
@@ -34,7 +34,7 @@ logs.get("/", (req, res) => {
             }
         }
     }
-    res.json(logsArray);
+    res.status(200).json(logsArray);
 });
 
 logs.get("/:arrayIndex", (req, res) => {
@@ -42,7 +42,7 @@ logs.get("/:arrayIndex", (req, res) => {
     if(Number(arrayIndex) != NaN && (Number(arrayIndex) >= 0 && Number(arrayIndex) < logsArray.length)){
         res.json(logsArray[Number(arrayIndex)]);
     }
-    res.redirect("/9001");
+    res.status(202).redirect("/9001");
 });
 
 // 404 Page not found
@@ -52,25 +52,25 @@ logs.get("*", (req, res) => {
 
 logs.post("/", jsonParser, (req, res) => {
     logsArray.push(req.body);
-    res.json(logsArray[logsArray.length - 1]);
+    res.status(201).json(logsArray[logsArray.length - 1]);
 });
 
 logs.delete("/:arrayIndex", (req, res) => {
     const { arrayIndex } = req.params;
     if(Number(arrayIndex) >= 0 && Number(arrayIndex) < logsArray.length && Number(arrayIndex) != NaN){
         logsArray.splice(Number(arrayIndex), 1);
-        res.send(`deletes at the index in the logs array`);
+        res.status().send(`deletes at the index in the logs array`);
     }
-    res.redirect("/9001");
+    res.status(202).redirect("/9001");
 });
 
 logs.put("/:arrayIndex", jsonParser, (req, res) => {
     const { arrayIndex } = req.params;
     if(Number(arrayIndex) >= 0 && Number(arrayIndex) < logsArray.length && Number(arrayIndex) != NaN){
         logsArray.splice(Number(arrayIndex), 1, req.body);
-        res.send(logsArray[Number(arrayIndex)]);
+        res.status(200).send(logsArray[Number(arrayIndex)]);
     }
-    res.redirect("/9001");
+    res.status(202).redirect("/9001");
 });
 
 module.exports = logs;
