@@ -24,8 +24,8 @@ logs.post("/", (req, res) => {
 
 logs.delete("/:index", (req, res) => {
     const {index} = req.params;
-    logsArray.splice(index, 1);
-    res.status(200).send(logsArray)
+    const deletedLog = logsArray.splice(index, 1);
+    res.status(200).send(deletedLog[0])
 })
 
 module.exports = logs;
