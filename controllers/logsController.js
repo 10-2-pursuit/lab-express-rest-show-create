@@ -15,11 +15,11 @@ logs.get("/", (req, res) => {
 
 logs.get("/:index", (req, res) => {
     const { index } = req.params;
-    console.log("SHOW ROUTE!@#$@!##@##!@#@!")
+    console.log(`SHOWING INDEX #${index}`)
     if (logsData[index]) {
         res.status(200).json(logsData[index])
     } else {
-        res.status(404).send("No bookmark at that index");
+        res.redirect(302, `/9001`)
     }
 })
 

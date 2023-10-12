@@ -11,9 +11,8 @@ app.use("/logs", logs);
 const coolest = "Gen";
 
 app.get("/", (req, res) => {
-    console.log(coolest);
-    const upperCoolest = coolest.toUpperCase();
-    res.send(`Welcome to our express app.  ${upperCoolest} is the coolest. its official`);
+   
+    res.send(`Welcome to our express app.`);
 })
 
 app.get("*", (req, res) => {
