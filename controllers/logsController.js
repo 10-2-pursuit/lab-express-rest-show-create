@@ -17,6 +17,7 @@ logs.get("/", (req, res) => {
                     queryResult = queryResult.sort((prev, next) => {return (prev.captainName.toLowerCase() > next.captainName.toLowerCase()) ? -1 : (prev.captainName.toLowerCase() < next.captainName.toLowerCase()) ? 1 : 0});
                     break;
                 default:
+                    res.status(400).json({ error : "Bad request"});
             };
             /*
                 - `/logs?lastCrisis=gt10` it will return all the logs where the `daysSinceLastCrisis`is **g**reater **t**than 10
@@ -31,6 +32,7 @@ logs.get("/", (req, res) => {
                     queryResult = queryResult.filter(singleLog => singleLog.mistakesWereMadeToday == "false");
                     break;
                 default:
+                    res.status(400).json({ error : "Bad request"});
             }
         }
     }
@@ -40,9 +42,9 @@ logs.get("/", (req, res) => {
 logs.get("/:arrayIndex", (req, res) => {
     const { arrayIndex } = req.params;
     if(Number(arrayIndex) != NaN && (Number(arrayIndex) >= 0 && Number(arrayIndex) < logsArray.length)){
-        res.json(logsArray[Number(arrayIndex)]);
+        res.status(200).json(logsArray[Number(arrayIndex)]);
     }
-    res.status(202).redirect("/9001");
+    res.status(404).redirect("/9001");
 });
 
 // 404 Page not found
@@ -59,9 +61,9 @@ logs.delete("/:arrayIndex", (req, res) => {
     const { arrayIndex } = req.params;
     if(Number(arrayIndex) >= 0 && Number(arrayIndex) < logsArray.length && Number(arrayIndex) != NaN){
         let deletedLog = logsArray.splice(Number(arrayIndex), 1);
-        res.status().send(`deletes at the index in the logs array`);
+        res.status(204).send(`deletes at the index in the logs array`);
     }
-    res.status(202).redirect("/9001");
+    res.status(404).redirect("/9001");
 });
 
 logs.put("/:arrayIndex", jsonParser, (req, res) => {
@@ -70,7 +72,7 @@ logs.put("/:arrayIndex", jsonParser, (req, res) => {
         logsArray.splice(Number(arrayIndex), 1, req.body);
         res.status(200).send(logsArray[Number(arrayIndex)]);
     }
-    res.status(202).redirect("/9001");
+    res.status(404).redirect("/9001");
 });
 
 module.exports = logs;
