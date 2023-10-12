@@ -1,20 +1,25 @@
 const express = require("express")
 const logs = express.Router()
-const logArray = require("../models/log.js")
+let logArray = require("../models/log")
 
 
+logs.delete("/:arrayIndex", (req, res) => {
 
+    const { arrayIndex } = req.params;
 
-logs.get("/", (req, res) => {
-    res.json(logArray)
+    if(logArray[arrayIndex]) {
+        logArray.splice(arrayIndex,1)
+        res.status(303).json(logArray)
+    } else { 
+        res.status(404).redirect()
+    }
+
 })
 
 logs.post("/", (req, res) => {
-    console.log("hit post")
     logArray.push(req.body)
     res.status(303).json(logArray)
 })
-
 
 logs.get("/:arrayIndex", (req, res) => {
     const { arrayIndex } = req.params;
@@ -24,6 +29,12 @@ logs.get("/:arrayIndex", (req, res) => {
         res.status(404).redirect()
     }
 })
+
+logs.get("/", (req, res) => {
+    res.json(logArray)
+})
+
+
 
 
 module.exports = logs
