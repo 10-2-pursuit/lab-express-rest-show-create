@@ -9,41 +9,57 @@ logs.get("/", (req, res) => {
   let sortedLogs = [...logsArray];
 
   if (order) {
-    if (req.query.order === "asc") {
+    if (order === "asc") {
       sortedLogs.sort((a, b) => a.captainName.localeCompare(b.captainName));
       res.send(sortedLogs);
-    } else if (req.query.order === "desc") {
+    } else if (order === "desc") {
       sortedLogs.sort((a, b) => b.captainName.localeCompare(a.captainName));
       res.send(sortedLogs);
     }
   }
 
   if (mistakes) {
-    if (req.query.mistakes === "true") {
+    if (mistakes === "true") {
       sortedLogs = sortedLogs.filter(
         (log) => log.mistakesWereMadeToday === true
       );
       res.send(sortedLogs);
-    } else if (req.query.mistakes === "false") {
+    } else if (mistakes === "false") {
       sortedLogs = sortedLogs.filter(
         (log) => log.mistakesWereMadeToday === false
       );
       res.send(sortedLogs);
     }
   }
+
   if (lastCrisis) {
-    if (req.query.lastCrisis === "gt10") {
-      sortedLogs = sortedLogs.filter((log) => log.daysSinceLastCrisis > 10);
+    if (lastCrisis.startsWith("gt")) {
+      let numValue = parseInt(lastCrisis.slice(2), 10);
+      sortedLogs = sortedLogs.filter(
+        (log) => log.daysSinceLastCrisis > numValue
+      );
       res.send(sortedLogs);
-    } else if (req.query.lastCrisis === "gte20") {
-      sortedLogs = sortedLogs.filter((log) => log.daysSinceLastCrisis >= 20);
+    } else if (lastCrisis.startsWith("gte")) {
+      let numValue = parseInt(lastCrisis.slice(3), 10);
+      sortedLogs = sortedLogs.filter(
+        (log) => log.daysSinceLastCrisis >= numValue
+      );
       res.send(sortedLogs);
-    } else if (req.query.lastCrisis === "lte5") {
-      sortedLogs = sortedLogs.filter((log) => log.daysSinceLastCrisis <= 5);
+    } else if (lastCrisis.startsWith("lte")) {
+      let numValue = parseInt(lastCrisis.slice(3), 10);
+      sortedLogs = sortedLogs.filter(
+        (log) => log.daysSinceLastCrisis <= numValue
+      );
       res.send(sortedLogs);
     }
   }
-  res.send(logsArray);
+
+  if(sortedLogs.length === 0) {
+    res.redirect("*");
+  } else {
+      res.send(logsArray);
+  }
+
 });
 
 logs.get("/:index", (req, res) => {
@@ -51,7 +67,7 @@ logs.get("/:index", (req, res) => {
   if (logsArray[index]) {
     res.status(200).send(logsArray[index]);
   } else {
-    res.redirect("/404");
+    res.redirect("*");
   }
 });
 
@@ -67,7 +83,7 @@ logs.delete("/:arrayIndex", (req, res) => {
     const deletedLog = logsArray.splice(arrayIndex, 1);
     res.status(200).send(deletedLog[0]);
   } else {
-    res.redirect("/404");
+    res.redirect("*");
   }
 });
 
@@ -78,7 +94,7 @@ logs.put("/:arrayIndex", (req, res) => {
     logsArray[arrayIndex] = req.body;
     res.status(200).send(logsArray[arrayIndex]);
   } else {
-    res.redirect("/404");
+    res.redirect("*");
   }
 });
 

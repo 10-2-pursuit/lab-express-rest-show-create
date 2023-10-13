@@ -11,8 +11,8 @@ app.get("/", (req, res) => {
   res.send("Welcome to the captain's log!");
 });
 
-app.use("/404", (req, res) => {
-  res.status(404).send("No logs at that index exist.");
+app.use("*", (req, res) => {
+  res.status(404).send("No logs found.");
 });
 
 module.exports = app;
