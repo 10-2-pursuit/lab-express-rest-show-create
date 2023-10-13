@@ -122,18 +122,17 @@ router.get('/logs/:index', (req, res) => {
 });
 
 
-router.put('/logs/:id', (req, res) => {
-  const logId = req.params.id; // Extract the log ID from the request parameters
-  const updatedLogData = req.body; // Updated data comes from the request body
+router.put('/logs/:index', (req, res) => {
+  const logId = index = req.params.id ; // Extract the log ID from the request parameters
+  const logToUpdate = router.get('logs/:index') // Updated data comes from the request body
 
-  // Find the log entry with the given log ID in your data source (e.g., logsArray)
-  const logToUpdate = logsArray.find((log) => log.id === logId);
-
+  
   if (!logToUpdate) {
     // Log entry not found
     return res.status(404).json({ success: false, message: 'Log entry not found' });
   }
-
+  const updatedLogData = req.body;
+  
   // Update the log entry with the provided data
   logToUpdate.captainName = updatedLogData.captainName;
   logToUpdate.title = updatedLogData.title;
