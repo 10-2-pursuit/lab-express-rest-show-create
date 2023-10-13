@@ -54,12 +54,11 @@ logs.get("/", (req, res) => {
     }
   }
 
-  if(sortedLogs.length === 0) {
+  if (sortedLogs.length === 0) {
     res.redirect("*");
   } else {
-      res.send(logsArray);
+    res.send(logsArray);
   }
-
 });
 
 logs.get("/:index", (req, res) => {
@@ -67,13 +66,34 @@ logs.get("/:index", (req, res) => {
   if (logsArray[index]) {
     res.status(200).send(logsArray[index]);
   } else {
-    res.redirect("*");
+    res.redirect("**");
   }
 });
 
+function validateLog(log) {
+  if (
+    typeof log.captainName === "string" &&
+    typeof log.title === "string" &&
+    typeof log.post === "string" &&
+    typeof log.mistakesWereMadeToday === "boolean" &&
+    typeof log.daysSinceLastCrisis === "number"
+  ) {
+    return true;
+  } else {
+    return false;
+  }
+}
+
+
 logs.post("/", (req, res) => {
-  logsArray.push(req.body);
-  res.status(200).send(logsArray[logsArray.length - 1]);
+    const newLog = req.body;
+
+    if (validateLog(newLog)) {
+        logsArray.push(newLog);
+        res.status(200).send(newLog);
+    } else {
+        res.status(400).send("Invalid log entry data types.");
+    }
 });
 
 logs.delete("/:arrayIndex", (req, res) => {
@@ -83,18 +103,21 @@ logs.delete("/:arrayIndex", (req, res) => {
     const deletedLog = logsArray.splice(arrayIndex, 1);
     res.status(200).send(deletedLog[0]);
   } else {
-    res.redirect("*");
+    res.redirect("**");
   }
 });
 
 logs.put("/:arrayIndex", (req, res) => {
   const { arrayIndex } = req.params;
+  const updatedLog = req.body;
 
-  if (logsArray[arrayIndex]) {
-    logsArray[arrayIndex] = req.body;
-    res.status(200).send(logsArray[arrayIndex]);
+  if (logsArray[arrayIndex] && validateLog(updatedLog)) {
+    logsArray[arrayIndex] = updatedLog;
+    res.status(200).send(updatedLog);
+  } else if (!logsArray[arrayIndex]) {
+    res.redirect("**");
   } else {
-    res.redirect("*");
+    res.status(400).send("Invalid log entry data types.")
   }
 });
 
