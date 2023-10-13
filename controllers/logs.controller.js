@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const logsArray = require('../models/log.js');
+const supertest = require('supertest');
 
 // Middleware to handle query parameters
 router.use((req, res, next) => {
@@ -47,17 +48,7 @@ router.get('/logs', (req, res) => {
   res.json(req.filteredLogs);
 });
 
-router.get('/:index', (req, res) => {
-  const index = req.params.index; // Parse the index parameter as an integer
-  if (!([index])) {
-    // Check if the index is invalid
-    res.status(404).send('Log not found');
-  } else {
-    // Retrieve and send the log at the specified index
 
-    res.json(filteredLogs[index]);
-  }
-});
 
 
 router.post("/", (req, res) => {
@@ -83,6 +74,54 @@ router.post("/", (req, res) => {
 // GET route to retrieve all log entries
 router.get("/", (req, res) => {
   res.json(logsArray);
+});
+router.get('/:index', (req, res) => {
+  const index = parseInt(req.params.index, 10);
+
+  if (!isNaN(index) && index >= 0 && index < logsArray.length) {
+    const log = logsArray[index];
+    res.json(log);
+  } else {
+    res.redirect('/404');
+  }
+});
+
+// Delete route to delete a log entry by index
+router.delete('/:index', (req, res) => {
+  const index = parseInt(req.params.index, 10);
+
+  if (!isNaN(index) && index >= 0 && index < logsArray.length) {
+    logsArray.splice(index, 1); // Remove the entry at the specified index
+    res.status(204).send(); // Return a successful response with no content
+  } else {
+    res.status(404).send('Log not found');
+  }
+});
+
+
+function validateLogEntry(entry) {
+  if (
+    typeof entry.captainName === 'string' &&
+    typeof entry.title === 'string' &&
+    typeof entry.post === 'string' &&
+    typeof entry.mistakesWereMadeToday === 'boolean' &&
+    typeof entry.daysSinceLastCrisis === 'number'
+  ) {
+    return true;
+  }
+  return false;
+}
+
+// In your create route, add the validation before pushing new data:
+router.post('/logs', (req, res) => {
+  const newLog = req.body;
+
+  if (validateLogEntry(newLog)) {
+    // Push the new log entry into your data source array
+    // Send a success message
+  } else {
+    res.status(400).send('Invalid log entry data');
+  }
 });
 
 module.exports = router;
