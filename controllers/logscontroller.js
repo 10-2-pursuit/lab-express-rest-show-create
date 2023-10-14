@@ -28,13 +28,14 @@ logs.delete("/:index", (req, res) =>{
 });
 
 logs.post("/", (req, res) => {
-    logsData.push({captainName: "Picard",
-    title: "Stars",
-    post: "Today I contemplated that there sure are a lot of stars in the sky",
-    mistakesWereMadeToday: true,
-    daysSinceLastCrisis: "10", })
-    res.status(200).json(logsData[logsData.length -1])
-})
+   const  {captainName, title, post ,mistakesWereMadeToday, daysSinceLastCrisis } = req.body;
+   const newLog = {
+    captainName, title, post, mistakesWereMadeToday, daysSinceLastCrisis,
+};
+logsData.push(newLog);
+
+   res.status(200).json(newLog);
+});
 
 
 module.exports = logs
