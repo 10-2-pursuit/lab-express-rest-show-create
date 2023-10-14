@@ -10,10 +10,10 @@ logs.get("/", (req, res) => {
 
 logs.get("/:index", (req, res) => {
     const { index } = req.params;
-    if(logsData[index]) {
-        res.json(logsData[index])
+    if(index< 0 || index >= logsData.length) {
+        res.redirect("/logs")
     } else {
-        res.status(404).send("No logs data found at index")
+        res.json(logsData[index]);
     }
 });
 

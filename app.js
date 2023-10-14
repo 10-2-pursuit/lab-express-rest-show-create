@@ -4,8 +4,9 @@ const logs = require("./controllers/logscontroller");
 const app = express(); 
 
 app.use(express.json());
-app.use(express.urlencoded({exended: true}));
 app.use("/logs", logs);
+
+app.use(express.urlencoded({extended: true}));
 
 app.use((err, req, res, next)=> {
  if(err) {
