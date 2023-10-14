@@ -89,8 +89,6 @@ logs.post("/", (req, res) => {
     const newLog = req.body;
 
     if (validateLog(newLog)) {
-        console.log("post route was hit!!!!");
-        console.log(req.body, "<----- sent from the user!!!!");
         logsArray.push(newLog);
         res.status(201).send(newLog);
     } else {
