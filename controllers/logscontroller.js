@@ -17,6 +17,16 @@ logs.get("/:index", (req, res) => {
     }
 });
 
+logs.delete("/:index", (req, res) =>{
+    const { index } = req.params;
+   if ( index < 0 || index >= logsData.length){
+    res.status(404).send("No logs data found at index");
+   } else{ 
+     logsData.splice(index, 1);
+     res.status(204).send();
+   }
+});
+
 logs.post("/", (req, res) => {
     logsData.push({captainName: "Picard",
     title: "Stars",
