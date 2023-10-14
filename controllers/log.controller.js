@@ -55,7 +55,7 @@ logs.get("/", (req, res) => {
   }
 
   if (sortedLogs.length === 0) {
-    res.redirect("*");
+    res.redirect("/404");
   } else {
     res.send(logsArray);
   }
@@ -66,7 +66,7 @@ logs.get("/:index", (req, res) => {
   if (logsArray[index]) {
     res.status(200).send(logsArray[index]);
   } else {
-    res.redirect("**");
+    res.redirect("/404");
   }
 });
 
@@ -89,8 +89,10 @@ logs.post("/", (req, res) => {
     const newLog = req.body;
 
     if (validateLog(newLog)) {
+        console.log("post route was hit!!!!");
+        console.log(req.body, "<----- sent from the user!!!!");
         logsArray.push(newLog);
-        res.status(200).send(newLog);
+        res.status(201).send(newLog);
     } else {
         res.status(400).send("Invalid log entry data types.");
     }
@@ -103,7 +105,7 @@ logs.delete("/:arrayIndex", (req, res) => {
     const deletedLog = logsArray.splice(arrayIndex, 1);
     res.status(200).send(deletedLog[0]);
   } else {
-    res.redirect("**");
+    res.redirect("/404");
   }
 });
 
@@ -115,7 +117,7 @@ logs.put("/:arrayIndex", (req, res) => {
     logsArray[arrayIndex] = updatedLog;
     res.status(200).send(updatedLog);
   } else if (!logsArray[arrayIndex]) {
-    res.redirect("**");
+    res.redirect("/404");
   } else {
     res.status(400).send("Invalid log entry data types.")
   }

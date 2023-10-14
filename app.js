@@ -11,12 +11,8 @@ app.get("/", (req, res) => {
   res.send("Welcome to the captain's log!");
 });
 
-app.use("*", (req, res) => {
-  res.status(404).send("No logs found.");
-});
-
-app.use("**", (req, res) => {
-    res.status(404).send("No logs found at that index.");
+app.use("/404", (req, res) => {
+    res.status(404).json({error: "Log could not be located."});
   });
 
 module.exports = app;
