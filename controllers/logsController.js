@@ -21,6 +21,16 @@ logs.post("/", (req, res) => {
     res.status(303).json(logArray)
 })
 
+logs.put("/:arrayIndex", (req, res) => {
+    const {arrayIndex} = req.params
+    if(logArray[arrayIndex]) {
+        logArray.splice(arrayIndex,1,req.body)
+        res.status(303).json(logArray)
+    } else {
+        res.status(404).redirect()
+    }
+})
+
 logs.get("/:arrayIndex", (req, res) => {
     const { arrayIndex } = req.params;
     if(logArray[arrayIndex]) {
