@@ -17,7 +17,7 @@ logs.get('/:index', (req, res) => {
 	if (logsData[index]) {
 		res.status(200).json(logsData[index]);
 	} else {
-		res.status(404).send('No log at that index!');
+		res.redirect('/logs');
 	}
 });
 
