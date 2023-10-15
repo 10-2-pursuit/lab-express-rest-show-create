@@ -15,14 +15,22 @@ logs.get("/:id", (req, res) => {
     if(logsData[id]) {
         res.status(200).json(logsData[id])
     } else {
-        ///res.status(404).send("No log for this ID.");
         res.redirect('/');
     }
 })
 
 logs.post("/", (req, res) => {
-    logsData.push(req.body);
-    res.status(200).json( {status: "OK", payload: logsData[logsData.length - 1]} )
+    
+    const newLog = {
+        captainName: "Picard",
+        title: "Stars",
+        post: "Today I contemplated that there sure are a lot of stars in the sky",
+        mistakesWereMadeToday: true,
+        daysSinceLastCrisis: "10",
+      };
+
+    logsData.push(newLog);
+    res.status(200).json(newLog);
 })
 
 logs.delete("/:logIndex", (req, res) => {
