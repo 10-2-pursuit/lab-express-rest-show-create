@@ -33,24 +33,25 @@ logs.get("/", (req, res) => {
   }
 
   if (lastCrisis) {
-    if (lastCrisis.startsWith("gt")) {
-      let numValue = parseInt(lastCrisis.slice(2), 10);
-      sortedLogs = sortedLogs.filter(
-        (log) => log.daysSinceLastCrisis > numValue
-      );
-      res.send(sortedLogs);
-    } else if (lastCrisis.startsWith("gte")) {
-      let numValue = parseInt(lastCrisis.slice(3), 10);
-      sortedLogs = sortedLogs.filter(
-        (log) => log.daysSinceLastCrisis >= numValue
-      );
-      res.send(sortedLogs);
-    } else if (lastCrisis.startsWith("lte")) {
-      let numValue = parseInt(lastCrisis.slice(3), 10);
-      sortedLogs = sortedLogs.filter(
-        (log) => log.daysSinceLastCrisis <= numValue
-      );
-      res.send(sortedLogs);
+    const match = lastCrisis.match(/(.*?)([0-9]+)/);
+    console.log("Match:", match)
+    if (match) {
+      const operator = match[1];
+      const value = parseInt(match[2], 10);
+
+      if (operator === "gt") {
+        sortedLogs = sortedLogs.filter(log => log.daysSinceLastCrisis > value);
+        res.send(sortedLogs)
+      } else if (operator === "gte") {
+        sortedLogs = sortedLogs.filter(log => log.daysSinceLastCrisis >= value);
+        res.send(sortedLogs)
+      } else if (operator === "lt") {
+        sortedLogs = sortedLogs.filter(log => log.daysSinceLastCrisis < value);
+        res.send(sortedLogs)
+      } else if (operator === "lte") {
+        sortedLogs = sortedLogs.filter(log => log.daysSinceLastCrisis <= value);
+        res.send(sortedLogs)
+      }
     }
   }
 
@@ -84,9 +85,8 @@ function validateLog(log) {
   }
 }
 
-
 logs.post("/", (req, res) => {
-    const newLog = req.body;
+  const newLog = req.body;
 
     if (validateLog(newLog)) {
         logsArray.push(newLog);
@@ -117,7 +117,7 @@ logs.put("/:arrayIndex", (req, res) => {
   } else if (!logsArray[arrayIndex]) {
     res.redirect("/404");
   } else {
-    res.status(400).send("Invalid log entry data types.")
+    res.status(400).send("Invalid log entry data types.");
   }
 });
 
