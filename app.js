@@ -1,9 +1,23 @@
-// "delivering the car:"
 const express = require("express");
 const logs = require("./controllers/logsController");
-// "express() is turning on the car"
-// 'app' is the name of our car
+
 const app = express();
 
+
 app.use(express.json());
-app.use("/logs",logs);
+app.use("/logs", logs);
+
+// const coolest = "Gen";
+
+app.get("/", (req, res) => {
+   
+    res.send(`Welcome to our express app.`);
+})
+
+app.get("*", (req, res) => {
+    res.status(404).json({error: "no page found "})
+})
+
+
+
+module.exports = app;
