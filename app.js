@@ -1,11 +1,15 @@
 // DEPENDENCIES
 const express = require('express');
-const logs = require('./models/log.js');
+const logs = require('./controllers/logsController.js');
 
 // CONFIGURATION
 const app = express();
+// const cors = require('cors');
+// app.use(cors());
 
-const logsController = require('./controllers/logsController.js');
+// MIDDLEWARE
+app.use(express.json());
+app.use('/logs', logs);
 
 // ROUTES
 app.get('/', (req, res) => {
