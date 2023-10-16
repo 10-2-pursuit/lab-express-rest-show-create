@@ -62,7 +62,13 @@ describe("logs", () => {
 
     describe("PUT", () => {
       it("replaces the index in the logs array", async () => {
-        const updatedLog = logsArray[0];
+        const updatedLog = {
+          captainName: "Ricardo",
+          title: "Couragous",
+          post: "Courage can be an emotion too.",
+          mistakesWereMadeToday: true,
+          daysSinceLastCrisis: 100,
+        };
 
         await new Promise((resolve) => {
           request(logs)
