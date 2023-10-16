@@ -23,34 +23,34 @@ logs.get("/", (req, res) => {
       sortedLogs = sortedLogs.filter(
         (log) => log.mistakesWereMadeToday === true
       );
-      res.send(sortedLogs);
+      res.json(sortedLogs);
     } else if (mistakes === "false") {
       sortedLogs = sortedLogs.filter(
         (log) => log.mistakesWereMadeToday === false
       );
-      res.send(sortedLogs);
+      res.json(sortedLogs);
     }
   }
 
   if (lastCrisis) {
     const match = lastCrisis.match(/(.*?)([0-9]+)/);
-    console.log("Match:", match)
+
     if (match) {
       const operator = match[1];
       const value = parseInt(match[2], 10);
 
       if (operator === "gt") {
         sortedLogs = sortedLogs.filter(log => log.daysSinceLastCrisis > value);
-        res.send(sortedLogs)
+        res.json(sortedLogs)
       } else if (operator === "gte") {
         sortedLogs = sortedLogs.filter(log => log.daysSinceLastCrisis >= value);
-        res.send(sortedLogs)
+        res.json(sortedLogs)
       } else if (operator === "lt") {
         sortedLogs = sortedLogs.filter(log => log.daysSinceLastCrisis < value);
-        res.send(sortedLogs)
+        res.json(sortedLogs)
       } else if (operator === "lte") {
         sortedLogs = sortedLogs.filter(log => log.daysSinceLastCrisis <= value);
-        res.send(sortedLogs)
+        res.json(sortedLogs)
       }
     }
   }
@@ -58,14 +58,14 @@ logs.get("/", (req, res) => {
   if (sortedLogs.length === 0) {
     res.redirect("/404");
   } else {
-    res.send(logsArray);
+    res.json(logsArray);
   }
 });
 
 logs.get("/:index", (req, res) => {
   const { index } = req.params;
   if (logsArray[index]) {
-    res.status(200).send(logsArray[index]);
+    res.status(200).json(logsArray[index]);
   } else {
     res.redirect("/404");
   }
@@ -90,7 +90,7 @@ logs.post("/", (req, res) => {
 
     if (validateLog(newLog)) {
         logsArray.push(newLog);
-        res.status(201).send(newLog);
+        res.status(201).json(newLog);
     } else {
         res.status(400).send("Invalid log entry data types.");
     }
@@ -101,7 +101,7 @@ logs.delete("/:arrayIndex", (req, res) => {
 
   if (logsArray[arrayIndex]) {
     const deletedLog = logsArray.splice(arrayIndex, 1);
-    res.status(200).send(deletedLog[0]);
+    res.status(200).json(deletedLog[0]);
   } else {
     res.redirect("/404");
   }
@@ -113,7 +113,7 @@ logs.put("/:arrayIndex", (req, res) => {
 
   if (logsArray[arrayIndex] && validateLog(updatedLog)) {
     logsArray[arrayIndex] = updatedLog;
-    res.status(200).send(updatedLog);
+    res.status(200).json(updatedLog);
   } else if (!logsArray[arrayIndex]) {
     res.redirect("/404");
   } else {
