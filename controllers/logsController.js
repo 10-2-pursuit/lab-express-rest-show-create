@@ -17,12 +17,16 @@ logs.delete("/:arrayIndex", (req, res) => {
 })
 
 logs.post("/", (req, res) => {
+    console.log("Post request recieved.")
     logArray.push(req.body)
     res.status(303).json(logArray)
 })
 
 logs.put("/:arrayIndex", (req, res) => {
     const {arrayIndex} = req.params
+
+    console.log(`Put request at index ${arrayIndex}`)
+
     if(logArray[arrayIndex]) {
         logArray.splice(arrayIndex,1,req.body)
         res.status(303).json(logArray)
@@ -33,6 +37,9 @@ logs.put("/:arrayIndex", (req, res) => {
 
 logs.get("/:arrayIndex", (req, res) => {
     const { arrayIndex } = req.params;
+    
+
+    console.log(`Request made for index ${arrayIndex}`)
     if(logArray[arrayIndex]) {
         res.status(200).json(logArray[arrayIndex])
     } else {
@@ -41,6 +48,7 @@ logs.get("/:arrayIndex", (req, res) => {
 })
 
 logs.get("/", (req, res) => {
+    console.log("request for all made")
     res.json(logArray)
 })
 
