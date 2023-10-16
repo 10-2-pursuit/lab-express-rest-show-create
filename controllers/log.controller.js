@@ -55,11 +55,7 @@ logs.get("/", (req, res) => {
     }
   }
 
-  if (sortedLogs.length === 0) {
-    res.redirect("/404");
-  } else {
-    res.json(logsArray);
-  }
+    res.send(logsArray);
 });
 
 logs.get("/:index", (req, res) => {
