@@ -10,7 +10,7 @@ module.exports = [
       captainName: "Ahab",
       title: "Whale",
       post: "By heavens man, we are turned round and round in this world, like yonder windlass, and fate is the handspike.",
-      mistakesWereMadeToday: true,
+      mistakesWereMadeToday: false,
       daysSinceLastCrisis: 20,
     },
     {
@@ -24,7 +24,7 @@ module.exports = [
       captainName: "Ahab",
       title: "Insolence",
       post: "I don't give reasons. I give orders!",
-      mistakesWereMadeToday: true,
+      mistakesWereMadeToday: false,
       daysSinceLastCrisis: 100,
     },
     {
@@ -38,7 +38,7 @@ module.exports = [
       captainName: "Ahab",
       title: "What is sleep?",
       post: "Sleep? That bed is a coffin, and those are winding sheets. I do not sleep, I die.",
-      mistakesWereMadeToday: true,
+      mistakesWereMadeToday: false,
       daysSinceLastCrisis: 5,
     },
     {
