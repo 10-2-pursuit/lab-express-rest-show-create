@@ -40,22 +40,30 @@ logs.get("/", (req, res) => {
       const value = parseInt(match[2], 10);
 
       if (operator === "gt") {
-        sortedLogs = sortedLogs.filter(log => log.daysSinceLastCrisis > value);
-        res.json(sortedLogs)
+        sortedLogs = sortedLogs.filter(
+          (log) => log.daysSinceLastCrisis > value
+        );
+        res.json(sortedLogs);
       } else if (operator === "gte") {
-        sortedLogs = sortedLogs.filter(log => log.daysSinceLastCrisis >= value);
-        res.json(sortedLogs)
+        sortedLogs = sortedLogs.filter(
+          (log) => log.daysSinceLastCrisis >= value
+        );
+        res.json(sortedLogs);
       } else if (operator === "lt") {
-        sortedLogs = sortedLogs.filter(log => log.daysSinceLastCrisis < value);
-        res.json(sortedLogs)
+        sortedLogs = sortedLogs.filter(
+          (log) => log.daysSinceLastCrisis < value
+        );
+        res.json(sortedLogs);
       } else if (operator === "lte") {
-        sortedLogs = sortedLogs.filter(log => log.daysSinceLastCrisis <= value);
-        res.json(sortedLogs)
+        sortedLogs = sortedLogs.filter(
+          (log) => log.daysSinceLastCrisis <= value
+        );
+        res.json(sortedLogs);
       }
     }
   }
 
-    res.send(logsArray);
+  res.send(logsArray);
 });
 
 logs.get("/:index", (req, res) => {
@@ -67,29 +75,11 @@ logs.get("/:index", (req, res) => {
   }
 });
 
-function validateLog(log) {
-  if (
-    typeof log.captainName === "string" &&
-    typeof log.title === "string" &&
-    typeof log.post === "string" &&
-    typeof log.mistakesWereMadeToday === "boolean" &&
-    typeof log.daysSinceLastCrisis === "number"
-  ) {
-    return true;
-  } else {
-    return false;
-  }
-}
-
 logs.post("/", (req, res) => {
   const newLog = req.body;
 
-    if (validateLog(newLog)) {
-        logsArray.push(newLog);
-        res.status(201).json(newLog);
-    } else {
-        res.status(400).send("Invalid log entry data types.");
-    }
+  logsArray.push(newLog);
+  res.status(201).json(newLog);
 });
 
 logs.delete("/:arrayIndex", (req, res) => {
@@ -107,14 +97,12 @@ logs.put("/:arrayIndex", (req, res) => {
   const { arrayIndex } = req.params;
   const updatedLog = req.body;
 
-  if (logsArray[arrayIndex] && validateLog(updatedLog)) {
+  if (logsArray[arrayIndex]) {
     logsArray[arrayIndex] = updatedLog;
     res.status(200).json(updatedLog);
-  } else if (!logsArray[arrayIndex]) {
-    res.redirect("/404");
   } else {
-    res.status(400).send("Invalid log entry data types.");
-  }
+    res.redirect("/404");
+  } 
 });
 
 module.exports = logs;
