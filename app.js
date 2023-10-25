@@ -1,36 +1,28 @@
 const express = require('express');
 const app = express();
-const logsController = require('./controllers/logs.controller.js');
+const cors = require('cors');
 const bodyParser = require('body-parser');
+const logsController = require('./controllers/logs.controller');
 
-// Middleware for query parameters
-app.use(bodyParser.json()); // Use bodyParser for parsing JSON data
-app.use(logsController);
+// Middleware to parse JSON requests
+app.use(express.json());
+app.use(cors());
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
 
-// Define the 404 route before defining other routes
-app.use("/404", (req, res) => {
-  res.status(404).send('Page not found');
+// Use logsController for handling log-related routes
+app.use('/logs', logsController);
+
+// Error handling middleware
+app.use((err, req, res, next) => {
+  console.error(err.stack);
+  res.status(500).send('Something broke!');
 });
 
-
-app.put('/logs/:id', logsController);
-
-
-// Route to handle log submissions
-app.post('/logs', logsController);
-
-
-// Welcome route
-app.get('/', (req, res) => {
-  res.send("Welcome to the Captain's Log!");
+// Handle 404 errors
+app.use((req, res) => {
+  res.status(404).send('404: Page not found');
 });
 
-// Show route to display a specific log entry
-app.get('/logs/:index', (req, res) => {
-  // Forward the request to the logsController router
-  logsController(req, res);
-});
-
-
-
-module.exports = app;
+ 
+module.exports =  app;

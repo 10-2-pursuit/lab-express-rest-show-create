@@ -15,7 +15,8 @@ router.get('/', (req, res) => {
 router.get('/:index', (req, res) => {
   const index = parseInt(req.params.index, 10);
   if (isNaN(index) || index < 0 || index >= logsArray.length) {
-    res.status(404).send('Log not found');
+    response.redirect('/v2/logs')
+    res.send('incorrect index provided');
   } else {
     const log = logsArray[index];
     res.send(`<h1>${log.title}</h1><p>${log.post}</p>`);

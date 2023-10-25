@@ -1,15 +1,12 @@
-
 const express = require('express');
-const router = express.Router();
+const logsRouter = express.Router();
 const logsArray = require('../models/log.js');
-const supertest = require('supertest');
 const bodyParser = require('body-parser');
 
-
 // Middleware to handle query parameters
-router.use((req, res, next) => {
+logsRouter.use((req, res, next) => {
   const { order, mistakes, lastCrisis } = req.query;
-  let filteredLogs = logsArray; // Initialize with all logs
+  let filteredLogs = logsArray.slice(); // Clone the array to avoid modifying the original
 
   // Sort the log entries by captainName
   if (order === 'asc') {
@@ -47,38 +44,30 @@ router.use((req, res, next) => {
 });
 
 // Route to display filtered/sorted logs
-router.get('/logs', (req, res) => {
+logsRouter.get('/logs', (req, res) => {
   res.json(req.filteredLogs);
 });
 
-
-
-const newLogData = [];
-
+// Function to validate log entry data
 function validateLogEntry(entry) {
-  if (
+  return (
     typeof entry.captainName === 'string' &&
     typeof entry.title === 'string' &&
     typeof entry.post === 'string' &&
     typeof entry.mistakesWereMadeToday === 'boolean' &&
     typeof entry.daysSinceLastCrisis === 'number'
-  ) {
-    return true;
-  }
-  return false;
+  );
 }
 
-router.use(bodyParser.json());
-
-router.post('/logs', (req, res) => {
+// Route to add a new log entry
+logsRouter.post('/logs', (req, res) => {
   try {
-    const newLog = req.body; // This data is available because of body-parser
+    const newLog = req.body;
 
     // Check if the request data is a valid log entry
     if (!validateLogEntry(newLog)) {
       return res.status(400).json({ error: 'Invalid log entry data' });
     }
-
 
     const newLogId = logsArray.length;
 
@@ -91,69 +80,41 @@ router.post('/logs', (req, res) => {
       mistakesWereMadeToday: newLog.mistakesWereMadeToday,
       daysSinceLastCrisis: newLog.daysSinceLastCrisis,
     };
-    
+
     // Add the new log entry to the logsArray
     logsArray.push(newLogEntry);
-    
+
     return res.status(201).json({ status: 'OK', payload: newLogEntry });
   } catch (error) {
     return res.status(500).json({ error: 'Internal server error' });
   }
 });
 
-
-// Read all log entries
-
-
-router.get('/logs', (req, res) => {
-  return res.json(logsArray);
+// Route to retrieve all log entries
+logsRouter.get('/', (req, res) => {
+  res.json(logsArray);
 });
 
-// Read a single log entry by ID
-router.get('/logs/:index', (req, res) => {
-  const index = parseInt(req.params.index, 10);
-
-  if (!isNaN(index) && index >= 0 && index < logsArray.length) {
-    const log = logsArray[index];
-    return res.json(log);
+// Route to retrieve a single log entry by ID
+logsRouter.get('/:index', (req, res) => {
+  const { index } = req.params;
+  if (index >= 0 && index < logsArray.length) {
+    res.status(200).json(logsArray[index]);
+  } else {
+    res.redirect('/logs');
+    res.status(404).send('No log entry at that index');
   }
-
-  return res.status(404).send('Log not found');
 });
 
-
-router.put('/logs/:index', (req, res) => {
-  const logId = index = req.params.id ; // Extract the log ID from the request parameters
-  const logToUpdate = router.get('logs/:index') // Updated data comes from the request body
-
-  
-  if (!logToUpdate) {
-    // Log entry not found
-    return res.status(404).json({ success: false, message: 'Log entry not found' });
+// Route to delete a log entry by ID
+logsRouter.delete('/:arrayIndex', (req, res) => {
+  const { arrayIndex } = req.params;
+  if (arrayIndex >= 0 && arrayIndex < logsArray.length) {
+    const deletedLog = logsArray.splice(arrayIndex, 1);
+    res.status(200).json(deletedLog[0]);
+  } else {
+    res.status(404).json({ error: 'Could not locate log entry to be deleted' });
   }
-  const updatedLogData = req.body;
-  
-  // Update the log entry with the provided data
-  logToUpdate.captainName = updatedLogData.captainName;
-  logToUpdate.title = updatedLogData.title;
-  logToUpdate.post = updatedLogData.post;
-  logToUpdate.mistakesWereMadeToday = updatedLogData.mistakesWereMadeToday;
-  logToUpdate.daysSinceLastCrisis = updatedLogData.daysSinceLastCrisis;
-
-  // Return a success response
-  res.status(200).json({ success: true, message: 'Log entry updated successfully', log: logToUpdate });
 });
 
-// Delete a log entry by ID
-router.delete('/logs/:index', (req, res) => {
-  const index = parseInt(req.params.index, 10);
-
-  if (!isNaN(index) && index >= 0 && index < logsArray.length) {
-    logsArray.splice(index, 1); // Remove the entry at the specified index
-    return res.status(204).send(); // Return a successful response with no content
-  }
-
-  return res.status(404).send('Log not found');
-});
-
-module.exports = router;
+module.exports = logsRouter;
