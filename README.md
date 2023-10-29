@@ -111,6 +111,14 @@ module.exports = [
 - create a route `/logs` that shows the array of logs you've created
 - create a 404 route that when a user tries to access a route that doesn't exist, they will see this page
 
+|  #  |   Action   |    URL    | HTTP Verb |    CRUD    |              Description              |
+| :-: | :--------: | :-------: | :-------: | :--------: | :-----------------------------------: |
+|  2  |  **Show**  | /logs/:id |    GET    |  **R**ead  | Get an individual view (show one log) |
+|  3  | **Create** |   /logs   |   POST    | **C**reate |           Create a new log            |
+
+- add routes for create and show
+- add some logic so that if someone goes to an invalid array position they will be redirected to the 404 route you had written in the last part
+
 ### Bonus
 
 Add functionality where if a user goes to
@@ -125,18 +133,21 @@ Add functionality where if a user goes to
 
 **Note** the original `/logs` route should be unaffected by these additions
 
+
+
 ## Part 2
 
-Do not start Part 2 until your index route passes all its tests. If you are stuck, be sure to ask for help.
+Do not start Part 2 until your show and create routes pass all its tests. If you are stuck, be sure to ask for help.
 
-|  #  |   Action   |    URL    | HTTP Verb |    CRUD    |              Description              |
-| :-: | :--------: | :-------: | :-------: | :--------: | :-----------------------------------: |
-|  2  |  **Show**  | /logs/:id |    GET    |  **R**ead  | Get an individual view (show one log) |
-|  3  | **Create** |   /logs   |   POST    | **C**reate |           Create a new log            |
+|  #  |   Action    |    URL    | HTTP Verb |    CRUD    | Description  |
+| :-: | :---------: | :-------: | :-------: | :--------: | :----------: |
+|  4  | **Destroy** | /logs/:id |  DELETE   | **D**elete | Delete a log |
+|  5  | **Update**  | /logs/:id |    PUT    | **U**pdate | Update a log |
 
-- add routes for create and show
+- add routes for delete and update
 - add some logic so that if someone goes to an invalid array position they will be redirected to the 404 route you had written in the last part
 
+- Your app should now pass all tests!
 ### Bonuses
 
 Add a validation function that checks to make sure that the values of each key are the correct type
@@ -158,21 +169,6 @@ Add a new folder called `v2` - In version 2, instead of sending JSON, you'll be 
 - write some logic to display the show data as an `h1` tag for the title, a `p` tag for the post, and additional styling for the other fields. Create a back button that takes users back to `/v2/logs`
 - This code likely is becoming rather tough to maintain. You can look into setting up a template engine like [ejs](https://ejs.co/) or creating a create-react-app front end and connecting it to the main API `/logs` not `/v2/logs` - **NOTE:** we'll learn how to connect a create-react-app in a later lesson.
 
-## Part 3
-
-Do not start Part 3 until your show and create routes pass all its tests. If you are stuck, be sure to ask for help.
-
-|  #  |   Action    |    URL    | HTTP Verb |    CRUD    | Description  |
-| :-: | :---------: | :-------: | :-------: | :--------: | :----------: |
-|  4  | **Destroy** | /logs/:id |  DELETE   | **D**elete | Delete a log |
-|  5  | **Update**  | /logs/:id |    PUT    | **U**pdate | Update a log |
-
-- add routes for delete and update
-- add some logic so that if someone goes to an invalid array position they will be redirected to the 404 route you had written in the last part
-
-- Your app should now pass all tests!
-
-### Bonuses
 
 - If you've already written a validation function, try adding it to the update route. If you have not written it yet, give it a try!
 - Go back and try any of the previous Bonuses
