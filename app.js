@@ -1,28 +1,23 @@
 const express = require('express');
-const app = express();
-const cors = require('cors');
 const bodyParser = require('body-parser');
+const app = express();
+
+
 const logsController = require('./controllers/logs.controller');
 
-// Middleware to parse JSON requests
-app.use(express.json());
-app.use(cors());
+// Middleware for parsing JSON
 app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
 
-// Use logsController for handling log-related routes
-app.use('/logs', logsController);
-
-// Error handling middleware
-app.use((err, req, res, next) => {
-  console.error(err.stack);
-  res.status(500).send('Something broke!');
+// 404 route
+app.get('/404', (req, res) => {
+  res.status(404).send('Page not found');
 });
 
-// Handle 404 errors
-app.use((req, res) => {
-  res.status(404).send('404: Page not found');
-});
+// Use the logsController for all routes
+app.use('/', logsController);
 
- 
-module.exports =  app;
+
+
+
+
+module.exports = app;
